@@ -15,11 +15,13 @@ Il progetto include:
 - Script SQL con dati di esempio e query reali
 - Relazione tecnica completa
 
-## 🗃️ Struttura del progetto
+## 📁 Struttura del progetto
 
+```text
 PetCare+/
-├── app/ # Codice dell'applicazione
-├── sql/ # schema.sql, query.sql, dati_iniziali.sql
-├── docs/ # Relazione finale, screenshot
-├── static/ # Risorse statiche (CSS, immagini)
-└── README.md # Questo file
+├── app/           # Codice dell'applicazione
+├── sql/           # schema.sql, query.sql, dati_iniziali.sql
+├── docs/          # Relazione finale, screenshot
+├── static/        # Risorse statiche (CSS, immagini)
+└── README.md      # Questo file
+
