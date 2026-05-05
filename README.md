@@ -1,6 +1,6 @@
 # PetCare+ 
 Sistema informativo per la gestione clinica di ospedali veterinari  
-Elaborato per il corso di **Basi di Dati** – A.A. 2024/2025
+Elaborato per il corso di **Basi di Dati** – A.A. 2025/2026
 
 ## Gruppo
 - Luca Dellasantina – DB Designer
