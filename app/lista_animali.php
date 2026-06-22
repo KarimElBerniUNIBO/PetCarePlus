@@ -1,29 +1,39 @@
-<?php include("db.php"); ?>
-<!DOCTYPE html>
-<html>
-<head><title>Elenco Animali</title></head>
-<body>
-<h2>Elenco Animali</h2>
-<table border="1">
-<tr><th>ID</th><th>Nome</th><th>Specie</th><th>Razza</th><th>Età</th></tr>
 <?php
+include "db.php";
+$page_title    = "Elenco animali";
+$page_heading  = "Elenco animali";
+$page_subtitle = "Tutti i pazienti registrati nel sistema.";
+$show_back = true;
+$active = 'animali';
+$wide = true;
+include "partials/header.php";
+
 $result = $conn->query("SELECT * FROM Animale");
-if (!$result) {
-    echo "<tr><td colspan='5'>Errore nella query: " . $conn->error . "</td></tr>";
-} elseif ($result->num_rows === 0) {
-    echo "<tr><td colspan='5'>Nessun animale presente.</td></tr>";
-} else {
-    while ($row = $result->fetch_assoc()) {
-        echo "<tr>
-            <td>{$row['IDAnimale']}</td>
-            <td>{$row['Nome']}</td>
-            <td>{$row['Specie']}</td>
-            <td>{$row['Razza']}</td>
-            <td>{$row['Eta']}</td>
-        </tr>";
-    }
-}
 ?>
-</table>
-</body>
-</html>
+<section class="card">
+<?php if (!$result): ?>
+    <div class="alert alert-err"><?= htmlspecialchars("Errore nella query: " . $conn->error) ?></div>
+<?php elseif ($result->num_rows === 0): ?>
+    <div class="empty-state">Nessun animale presente. <a href="inserisci_animale.php">Aggiungine uno</a>.</div>
+<?php else: ?>
+    <div class="table-wrap">
+        <table class="data-table">
+            <thead>
+                <tr><th>ID</th><th>Nome</th><th>Specie</th><th>Razza</th><th>Età</th></tr>
+            </thead>
+            <tbody>
+            <?php while ($row = $result->fetch_assoc()): ?>
+                <tr>
+                    <td><?= htmlspecialchars($row['IDAnimale']) ?></td>
+                    <td><?= htmlspecialchars($row['Nome']) ?></td>
+                    <td><?= htmlspecialchars($row['Specie']) ?></td>
+                    <td><?= htmlspecialchars($row['Razza']) ?></td>
+                    <td><?= htmlspecialchars($row['Eta']) ?></td>
+                </tr>
+            <?php endwhile; ?>
+            </tbody>
+        </table>
+    </div>
+<?php endif; ?>
+</section>
+<?php include "partials/footer.php"; ?>

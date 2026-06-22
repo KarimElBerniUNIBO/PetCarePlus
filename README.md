@@ -19,11 +19,14 @@ Il progetto include:
 
 ```text
 PetCare+/
-├── app/           # Codice dell'applicazione
-├── sql/           # schema.sql, query.sql, dati_iniziali.sql
-├── docs/          # Relazione finale, screenshot
-├── static/        # Risorse statiche (CSS, immagini)
-└── README.md      # Questo file
+├── app/                 # Applicazione PHP
+│   ├── css/             # Foglio di stile (style.css)
+│   ├── partials/        # Header e footer condivisi
+│   ├── index.php        # Dashboard
+│   ├── admin.php        # Area amministratore
+│   └── *.php            # Pagine delle 18 operazioni + db.php
+├── sql/                 # petcare_schema.sql, petcare_dati.sql e le query (query_*.sql)
+└── README.md            # Questo file
 ```
 
 ## Guida alla corretta esecuzione del software gestionale

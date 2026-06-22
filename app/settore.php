@@ -1,20 +1,31 @@
-<?php include("db.php"); ?>
-<!DOCTYPE html>
-<html>
-<head><title>Aggiungi Settore</title></head>
-<body>
-<h2>Aggiungi Nuovo Settore</h2>
-<form method="post">
-    Nome Settore: <input type="text" name="nome" required><br>
-    Tipo Specializzazione: <input type="text" name="tipo" required><br>
-    <input type="submit" name="submit" value="Aggiungi">
-</form>
 <?php
+include "db.php";
+$alert = null;
 if (isset($_POST['submit'])) {
     $sql = "INSERT INTO Settore (Nome, TipoSpecializzazione)
             VALUES ('{$_POST['nome']}', '{$_POST['tipo']}')";
-    echo $conn->query($sql) ? "Settore aggiunto!" : "Errore: " . $conn->error;
+    $alert = $conn->query($sql) ? ['ok', "Settore aggiunto!"] : ['err', "Errore: " . $conn->error];
 }
+
+$page_title    = "Nuovo settore";
+$page_heading  = "Aggiungi nuovo settore";
+$page_subtitle = "Crea un nuovo reparto clinico con la relativa specializzazione medica.";
+$show_back = true;
+include "partials/header.php";
 ?>
-</body>
-</html>
+<section class="card">
+    <form class="form" method="post">
+        <div class="field">
+            <label for="nome">Nome settore</label>
+            <input id="nome" type="text" name="nome" placeholder="Es. Riabilitazione" required>
+        </div>
+        <div class="field">
+            <label for="tipo">Tipo specializzazione</label>
+            <input id="tipo" type="text" name="tipo" placeholder="Es. Fisioterapia" required>
+        </div>
+        <div class="form-actions">
+            <button class="btn" type="submit" name="submit">Aggiungi settore</button>
+        </div>
+    </form>
+</section>
+<?php include "partials/footer.php"; ?>

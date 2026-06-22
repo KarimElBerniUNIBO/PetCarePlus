@@ -1,16 +1,6 @@
-<?php include("db.php"); ?>
-<!DOCTYPE html>
-<html>
-<head><title>Dimissione Ricovero</title></head>
-<body>
-<h2>Dimissione da Ricovero</h2>
-<form method="post">
-    ID Ricovero: <input type="number" name="id_ricovero" required><br>
-    Data Uscita: <input type="date" name="data_uscita" required><br>
-    Diagnosi Dimissione: <input type="text" name="diagnosi_dimissione" required><br>
-    <input type="submit" name="submit" value="Dimetti">
-</form>
 <?php
+include "db.php";
+$alert = null;
 if (isset($_POST['submit'])) {
     $id_ricovero = (int)$_POST['id_ricovero'];
 
@@ -22,14 +12,40 @@ if (isset($_POST['submit'])) {
         $sql_box      = "UPDATE Box SET StatoOccupazione='Libero' WHERE IDBox=$id_box";
 
         if ($conn->query($sql_ricovero) && $conn->query($sql_box)) {
-            echo "Dimissione effettuata e box liberato!";
+            $alert = ['ok', "Dimissione effettuata e box liberato!"];
         } else {
-            echo "Errore: " . $conn->error;
+            $alert = ['err', "Errore: " . $conn->error];
         }
     } else {
-        echo "Ricovero non trovato.";
+        $alert = ['err', "Ricovero non trovato."];
     }
 }
+
+$page_title    = "Dimissione ricovero";
+$page_heading  = "Dimissione da ricovero";
+$page_subtitle = "Registra data di uscita e diagnosi di dimissione: il box associato torna automaticamente libero.";
+$show_back = true;
+include "partials/header.php";
 ?>
-</body>
-</html>
+<section class="card">
+    <form class="form" method="post">
+        <div class="form-row">
+            <div class="field">
+                <label for="id_ricovero">ID Ricovero</label>
+                <input id="id_ricovero" type="number" name="id_ricovero" required>
+            </div>
+            <div class="field">
+                <label for="data_uscita">Data uscita</label>
+                <input id="data_uscita" type="date" name="data_uscita" required>
+            </div>
+        </div>
+        <div class="field">
+            <label for="diagnosi_dimissione">Diagnosi dimissione</label>
+            <input id="diagnosi_dimissione" type="text" name="diagnosi_dimissione" placeholder="Es. Guarito" required>
+        </div>
+        <div class="form-actions">
+            <button class="btn" type="submit" name="submit">Dimetti</button>
+        </div>
+    </form>
+</section>
+<?php include "partials/footer.php"; ?>

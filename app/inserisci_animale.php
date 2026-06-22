@@ -1,40 +1,59 @@
-<?php include("db.php"); ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Nuovo Animale</title>
-</head>
-<body>
-    <h2>Inserisci un nuovo animale</h2>
-    <form method="post" action="">
-        Specie: <input type="text" name="specie"><br>
-        Razza: <input type="text" name="razza"><br>
-        Età: <input type="number" name="eta"><br>
-        Nome: <input type="text" name="nome"><br>
-        <input type="submit" name="submit" value="Salva">
-    </form>
+<?php
+include "db.php";
+$alert = null;
+if (isset($_POST['submit'])) {
+    $specie = $_POST['specie'];
+    $razza  = $_POST['razza'];
+    $eta    = $_POST['eta'];
+    $nome   = $_POST['nome'];
 
-    <?php
-    if (isset($_POST['submit'])) {
-        $specie = $_POST['specie'];
-        $razza = $_POST['razza'];
-        $eta = $_POST['eta'];
-        $nome = $_POST['nome'];
-
-        $sql = "INSERT INTO Animale (Specie, Razza, Eta, Nome) VALUES ('$specie', '$razza', $eta, '$nome')";
-        if ($conn->query($sql) === TRUE) {
-            // Apertura automatica della cartella clinica per il nuovo animale (Op. 13)
-            $id_animale = $conn->insert_id;
-            $sql2 = "INSERT INTO CartellaClinica (IDAnimale) VALUES ($id_animale)";
-            if ($conn->query($sql2) === TRUE) {
-                echo "Animale e cartella clinica creati correttamente!";
-            } else {
-                echo "Animale inserito ma errore nella cartella clinica: " . $conn->error;
-            }
+    $sql = "INSERT INTO Animale (Specie, Razza, Eta, Nome) VALUES ('$specie', '$razza', $eta, '$nome')";
+    if ($conn->query($sql) === TRUE) {
+        // Apertura automatica della cartella clinica per il nuovo animale (Op. 13)
+        $id_animale = $conn->insert_id;
+        $sql2 = "INSERT INTO CartellaClinica (IDAnimale) VALUES ($id_animale)";
+        if ($conn->query($sql2) === TRUE) {
+            $alert = ['ok', "Animale e cartella clinica creati correttamente!"];
         } else {
-            echo "Errore: " . $conn->error;
+            $alert = ['err', "Animale inserito ma errore nella cartella clinica: " . $conn->error];
         }
+    } else {
+        $alert = ['err', "Errore: " . $conn->error];
     }
-    ?>
-</body>
-</html>
+}
+
+$page_title    = "Nuovo animale";
+$page_heading  = "Inserisci un nuovo animale";
+$page_subtitle = "Registra i dati anagrafici del paziente: la cartella clinica verrà aperta automaticamente.";
+$show_back = true;
+$active = 'animali';
+include "partials/header.php";
+?>
+<section class="card">
+    <form class="form" method="post">
+        <div class="form-row">
+            <div class="field">
+                <label for="specie">Specie</label>
+                <input id="specie" type="text" name="specie" placeholder="Es. Cane" required>
+            </div>
+            <div class="field">
+                <label for="razza">Razza</label>
+                <input id="razza" type="text" name="razza" placeholder="Es. Labrador" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="field">
+                <label for="nome">Nome</label>
+                <input id="nome" type="text" name="nome" placeholder="Es. Fido" required>
+            </div>
+            <div class="field">
+                <label for="eta">Età</label>
+                <input id="eta" type="number" name="eta" min="0" placeholder="Anni" required>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="btn" type="submit" name="submit">Salva animale</button>
+        </div>
+    </form>
+</section>
+<?php include "partials/footer.php"; ?>
