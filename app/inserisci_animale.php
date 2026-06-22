@@ -23,7 +23,14 @@
 
         $sql = "INSERT INTO Animale (Specie, Razza, Eta, Nome) VALUES ('$specie', '$razza', $eta, '$nome')";
         if ($conn->query($sql) === TRUE) {
-            echo "Animale inserito correttamente!";
+            // Apertura automatica della cartella clinica per il nuovo animale (Op. 13)
+            $id_animale = $conn->insert_id;
+            $sql2 = "INSERT INTO CartellaClinica (IDAnimale) VALUES ($id_animale)";
+            if ($conn->query($sql2) === TRUE) {
+                echo "Animale e cartella clinica creati correttamente!";
+            } else {
+                echo "Animale inserito ma errore nella cartella clinica: " . $conn->error;
+            }
         } else {
             echo "Errore: " . $conn->error;
         }

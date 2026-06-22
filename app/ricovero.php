@@ -19,7 +19,16 @@ if (isset($_POST['submit'])) {
         $sql1 = "INSERT INTO Ricovero (IDCartella, IDBox, DataIngresso, DiagnosiIniziale)
                 VALUES ({$_POST['id_cartella']}, $id_box, '{$_POST['data_ingresso']}', '{$_POST['diagnosi']}')";
         $sql2 = "UPDATE Box SET StatoOccupazione='Occupato' WHERE IDBox = $id_box";
-        echo ($conn->query($sql1) && $conn->query($sql2)) ? "Ricovero registrato!" : "Errore: " . $conn->error;
+
+        // Operazione atomica: o vanno a buon fine entrambe le query, o si annulla tutto (Op. 18)
+        $conn->begin_transaction();
+        if ($conn->query($sql1) && $conn->query($sql2)) {
+            $conn->commit();
+            echo "Ricovero registrato!";
+        } else {
+            $conn->rollback();
+            echo "Errore: " . $conn->error;
+        }
     } else {
         echo "Nessun box disponibile!";
     }
