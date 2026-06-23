@@ -9,7 +9,7 @@ if (isset($_POST['submit'])) {
 
 $page_title    = "Esame diagnostico";
 $page_heading  = "Inserisci esame";
-$page_subtitle = "Registra un esame di laboratorio collegandolo alla cartella clinica e al referto.";
+$page_subtitle = "Registra un esame e il referto.";
 $show_back = true;
 include "partials/header.php";
 ?>
@@ -17,12 +17,16 @@ include "partials/header.php";
     <form class="form" method="post">
         <div class="form-row">
             <div class="field">
-                <label for="id_lab">ID Laboratorio</label>
-                <input id="id_lab" type="number" name="id_lab" required>
+                <label for="id_lab">Laboratorio</label>
+                <?= render_select($conn, 'id_lab',
+                    "SELECT IDLaboratorio, TipoAnalisi FROM Laboratorio ORDER BY TipoAnalisi",
+                    'IDLaboratorio', fn($r) => $r['TipoAnalisi']) ?>
             </div>
             <div class="field">
-                <label for="id_cartella">ID Cartella</label>
-                <input id="id_cartella" type="number" name="id_cartella" required>
+                <label for="id_cartella">Cartella clinica</label>
+                <?= render_select($conn, 'id_cartella',
+                    "SELECT C.IDCartella, A.Nome, A.Specie FROM CartellaClinica C JOIN Animale A ON C.IDAnimale = A.IDAnimale ORDER BY C.IDCartella",
+                    'IDCartella', fn($r) => "Cartella #{$r['IDCartella']} — {$r['Nome']} ({$r['Specie']})") ?>
             </div>
         </div>
         <div class="form-row">

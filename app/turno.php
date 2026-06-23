@@ -9,7 +9,7 @@ if (isset($_POST['submit'])) {
 
 $page_title    = "Turno personale";
 $page_heading  = "Inserisci turno";
-$page_subtitle = "Assegna un turno orario a un membro del personale con data e orari di inizio e fine.";
+$page_subtitle = "Aggiungi un turno del personale.";
 $show_back = true;
 include "partials/header.php";
 ?>
@@ -17,8 +17,10 @@ include "partials/header.php";
     <form class="form" method="post">
         <div class="form-row">
             <div class="field">
-                <label for="id_persona">ID Persona</label>
-                <input id="id_persona" type="number" name="id_persona" required>
+                <label for="id_persona">Membro del personale</label>
+                <?= render_select($conn, 'id_persona',
+                    "SELECT IDPersona, Nome, Cognome, Specializzazione FROM Personale ORDER BY Cognome",
+                    'IDPersona', fn($r) => "{$r['Nome']} {$r['Cognome']} ({$r['Specializzazione']})") ?>
             </div>
             <div class="field">
                 <label for="data">Data</label>

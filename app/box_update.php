@@ -8,7 +8,7 @@ if (isset($_POST['submit'])) {
 
 $page_title    = "Disponibilità box";
 $page_heading  = "Aggiorna stato box";
-$page_subtitle = "Imposta manualmente lo stato di occupazione di un box (manutenzione, sanificazione, ecc.).";
+$page_subtitle = "Aggiorna lo stato di un box.";
 $show_back = true;
 include "partials/header.php";
 ?>
@@ -16,8 +16,10 @@ include "partials/header.php";
     <form class="form" method="post">
         <div class="form-row">
             <div class="field">
-                <label for="id_box">ID Box</label>
-                <input id="id_box" type="number" name="id_box" required>
+                <label for="id_box">Box</label>
+                <?= render_select($conn, 'id_box',
+                    "SELECT IDBox, Tipo, StatoOccupazione FROM Box ORDER BY IDBox",
+                    'IDBox', fn($r) => "Box #{$r['IDBox']} — {$r['Tipo']} ({$r['StatoOccupazione']})") ?>
             </div>
             <div class="field">
                 <label for="stato">Nuovo stato</label>

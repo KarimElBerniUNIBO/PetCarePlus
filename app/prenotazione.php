@@ -9,7 +9,7 @@ if (isset($_POST['submit'])) {
 
 $page_title    = "Prenota visita";
 $page_heading  = "Prenotazione visita";
-$page_subtitle = "Pianifica una visita futura per un animale paziente indicando il veterinario richiesto.";
+$page_subtitle = "Prenota una visita per un animale.";
 $show_back = true;
 include "partials/header.php";
 ?>
@@ -17,12 +17,16 @@ include "partials/header.php";
     <form class="form" method="post">
         <div class="form-row">
             <div class="field">
-                <label for="id_animale">ID Animale</label>
-                <input id="id_animale" type="number" name="id_animale" required>
+                <label for="id_animale">Animale</label>
+                <?= render_select($conn, 'id_animale',
+                    "SELECT IDAnimale, Nome, Specie FROM Animale ORDER BY Nome",
+                    'IDAnimale', fn($r) => "{$r['Nome']} ({$r['Specie']})") ?>
             </div>
             <div class="field">
-                <label for="id_persona">ID Persona</label>
-                <input id="id_persona" type="number" name="id_persona" required>
+                <label for="id_persona">Veterinario</label>
+                <?= render_select($conn, 'id_persona',
+                    "SELECT IDPersona, Nome, Cognome, Specializzazione FROM Personale ORDER BY Cognome",
+                    'IDPersona', fn($r) => "{$r['Nome']} {$r['Cognome']} ({$r['Specializzazione']})") ?>
             </div>
         </div>
         <div class="field">

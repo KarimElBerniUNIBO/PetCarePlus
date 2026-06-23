@@ -9,7 +9,7 @@ if (isset($_POST['submit'])) {
 
     $sql = "INSERT INTO Animale (Specie, Razza, Eta, Nome) VALUES ('$specie', '$razza', $eta, '$nome')";
     if ($conn->query($sql) === TRUE) {
-        // Apertura automatica della cartella clinica per il nuovo animale (Op. 13)
+        // creo anche la cartella clinica
         $id_animale = $conn->insert_id;
         $sql2 = "INSERT INTO CartellaClinica (IDAnimale) VALUES ($id_animale)";
         if ($conn->query($sql2) === TRUE) {
@@ -24,7 +24,7 @@ if (isset($_POST['submit'])) {
 
 $page_title    = "Nuovo animale";
 $page_heading  = "Inserisci un nuovo animale";
-$page_subtitle = "Registra i dati anagrafici del paziente: la cartella clinica verrà aperta automaticamente.";
+$page_subtitle = "Aggiungi un animale al sistema.";
 $show_back = true;
 $active = 'animali';
 include "partials/header.php";

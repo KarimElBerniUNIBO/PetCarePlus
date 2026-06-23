@@ -9,7 +9,7 @@ if (isset($_POST['submit'])) {
 
 $page_title    = "Inserisci trattamento";
 $page_heading  = "Inserimento trattamento";
-$page_subtitle = "Registra un trattamento eseguito durante una visita, collegandolo alla cartella clinica.";
+$page_subtitle = "Registra un trattamento di una visita.";
 $show_back = true;
 include "partials/header.php";
 ?>
@@ -31,12 +31,16 @@ include "partials/header.php";
         </div>
         <div class="form-row">
             <div class="field">
-                <label for="id_cartella">ID Cartella</label>
-                <input id="id_cartella" type="number" name="id_cartella" required>
+                <label for="id_cartella">Cartella clinica</label>
+                <?= render_select($conn, 'id_cartella',
+                    "SELECT C.IDCartella, A.Nome, A.Specie FROM CartellaClinica C JOIN Animale A ON C.IDAnimale = A.IDAnimale ORDER BY C.IDCartella",
+                    'IDCartella', fn($r) => "Cartella #{$r['IDCartella']} — {$r['Nome']} ({$r['Specie']})") ?>
             </div>
             <div class="field">
-                <label for="id_visita">ID Visita</label>
-                <input id="id_visita" type="number" name="id_visita" required>
+                <label for="id_visita">Visita</label>
+                <?= render_select($conn, 'id_visita',
+                    "SELECT IDVisita, Data, TipoVisita FROM Visita ORDER BY IDVisita",
+                    'IDVisita', fn($r) => "Visita #{$r['IDVisita']} — {$r['Data']} ({$r['TipoVisita']})") ?>
             </div>
         </div>
         <div class="form-actions">

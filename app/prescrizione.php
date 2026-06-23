@@ -5,7 +5,7 @@ if (isset($_POST['submit'])) {
     $id_farmaco = (int)$_POST['id_farmaco'];
     $quantita   = (int)$_POST['quantita'];
 
-    // PrezzoFinale calcolato automaticamente = PrezzoUnitario × Quantità (Op. 6, sez. 3.4)
+    // calcolo il prezzo finale
     $res = $conn->query("SELECT PrezzoUnitario FROM Farmaco WHERE IDFarmaco = $id_farmaco");
     if ($res && $row = $res->fetch_assoc()) {
         $prezzo_finale = $row['PrezzoUnitario'] * $quantita;
@@ -21,7 +21,7 @@ if (isset($_POST['submit'])) {
 
 $page_title    = "Prescrizione";
 $page_heading  = "Inserisci prescrizione";
-$page_subtitle = "Il prezzo finale viene calcolato automaticamente come prezzo unitario del farmaco × quantità.";
+$page_subtitle = "Prescrivi un farmaco a un animale.";
 $show_back = true;
 include "partials/header.php";
 ?>
@@ -29,12 +29,16 @@ include "partials/header.php";
     <form class="form" method="post">
         <div class="form-row">
             <div class="field">
-                <label for="id_farmaco">ID Farmaco</label>
-                <input id="id_farmaco" type="number" name="id_farmaco" required>
+                <label for="id_farmaco">Farmaco</label>
+                <?= render_select($conn, 'id_farmaco',
+                    "SELECT IDFarmaco, Nome, PrezzoUnitario FROM Farmaco ORDER BY Nome",
+                    'IDFarmaco', fn($r) => "{$r['Nome']} (€ {$r['PrezzoUnitario']})") ?>
             </div>
             <div class="field">
-                <label for="id_cartella">ID Cartella</label>
-                <input id="id_cartella" type="number" name="id_cartella" required>
+                <label for="id_cartella">Cartella clinica</label>
+                <?= render_select($conn, 'id_cartella',
+                    "SELECT C.IDCartella, A.Nome, A.Specie FROM CartellaClinica C JOIN Animale A ON C.IDAnimale = A.IDAnimale ORDER BY C.IDCartella",
+                    'IDCartella', fn($r) => "Cartella #{$r['IDCartella']} — {$r['Nome']} ({$r['Specie']})") ?>
             </div>
         </div>
         <div class="form-row">

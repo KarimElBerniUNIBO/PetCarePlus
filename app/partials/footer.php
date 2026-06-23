@@ -1,6 +1,6 @@
     </main>
     <footer class="site-footer">
-        <p>PetCare+ · Sistema di gestione per cliniche veterinarie</p>
+        <p>PetCare+ - Gestione clinica veterinaria</p>
     </footer>
 </body>
 </html>

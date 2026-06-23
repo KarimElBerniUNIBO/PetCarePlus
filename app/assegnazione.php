@@ -9,7 +9,7 @@ if (isset($_POST['submit'])) {
 
 $page_title    = "Assegna personale";
 $page_heading  = "Assegna personale a settore";
-$page_subtitle = "Collega un veterinario o tecnico al settore clinico in cui opera stabilmente.";
+$page_subtitle = "Assegna un veterinario a un settore.";
 $show_back = true;
 include "partials/header.php";
 ?>
@@ -17,12 +17,16 @@ include "partials/header.php";
     <form class="form" method="post">
         <div class="form-row">
             <div class="field">
-                <label for="id_persona">ID Persona</label>
-                <input id="id_persona" type="number" name="id_persona" required>
+                <label for="id_persona">Membro del personale</label>
+                <?= render_select($conn, 'id_persona',
+                    "SELECT IDPersona, Nome, Cognome, Specializzazione FROM Personale ORDER BY Cognome",
+                    'IDPersona', fn($r) => "{$r['Nome']} {$r['Cognome']} ({$r['Specializzazione']})") ?>
             </div>
             <div class="field">
-                <label for="id_settore">ID Settore</label>
-                <input id="id_settore" type="number" name="id_settore" required>
+                <label for="id_settore">Settore</label>
+                <?= render_select($conn, 'id_settore',
+                    "SELECT IDSettore, Nome, TipoSpecializzazione FROM Settore ORDER BY Nome",
+                    'IDSettore', fn($r) => "{$r['Nome']} ({$r['TipoSpecializzazione']})") ?>
             </div>
         </div>
         <div class="form-actions">

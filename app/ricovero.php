@@ -9,7 +9,7 @@ if (isset($_POST['submit'])) {
                 VALUES ({$_POST['id_cartella']}, $id_box, '{$_POST['data_ingresso']}', '{$_POST['diagnosi']}')";
         $sql2 = "UPDATE Box SET StatoOccupazione='Occupato' WHERE IDBox = $id_box";
 
-        // Operazione atomica: o vanno a buon fine entrambe le query, o si annulla tutto (Op. 18)
+        // transazione: o entrambe le query o nessuna
         $conn->begin_transaction();
         if ($conn->query($sql1) && $conn->query($sql2)) {
             $conn->commit();
@@ -25,7 +25,7 @@ if (isset($_POST['submit'])) {
 
 $page_title    = "Nuovo ricovero";
 $page_heading  = "Registra ricovero";
-$page_subtitle = "Il sistema assegna automaticamente il primo box libero del settore e lo segna come occupato.";
+$page_subtitle = "Apri un ricovero e assegna un box.";
 $show_back = true;
 include "partials/header.php";
 ?>
@@ -33,12 +33,16 @@ include "partials/header.php";
     <form class="form" method="post">
         <div class="form-row">
             <div class="field">
-                <label for="id_cartella">ID Cartella</label>
-                <input id="id_cartella" type="number" name="id_cartella" required>
+                <label for="id_cartella">Cartella clinica</label>
+                <?= render_select($conn, 'id_cartella',
+                    "SELECT C.IDCartella, A.Nome, A.Specie FROM CartellaClinica C JOIN Animale A ON C.IDAnimale = A.IDAnimale ORDER BY C.IDCartella",
+                    'IDCartella', fn($r) => "Cartella #{$r['IDCartella']} — {$r['Nome']} ({$r['Specie']})") ?>
             </div>
             <div class="field">
                 <label for="id_settore">Settore</label>
-                <input id="id_settore" type="number" name="id_settore" required>
+                <?= render_select($conn, 'id_settore',
+                    "SELECT IDSettore, Nome, TipoSpecializzazione FROM Settore ORDER BY Nome",
+                    'IDSettore', fn($r) => "{$r['Nome']} ({$r['TipoSpecializzazione']})") ?>
             </div>
         </div>
         <div class="field">

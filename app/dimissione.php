@@ -23,7 +23,7 @@ if (isset($_POST['submit'])) {
 
 $page_title    = "Dimissione ricovero";
 $page_heading  = "Dimissione da ricovero";
-$page_subtitle = "Registra data di uscita e diagnosi di dimissione: il box associato torna automaticamente libero.";
+$page_subtitle = "Chiudi un ricovero e libera il box.";
 $show_back = true;
 include "partials/header.php";
 ?>
@@ -31,8 +31,10 @@ include "partials/header.php";
     <form class="form" method="post">
         <div class="form-row">
             <div class="field">
-                <label for="id_ricovero">ID Ricovero</label>
-                <input id="id_ricovero" type="number" name="id_ricovero" required>
+                <label for="id_ricovero">Ricovero attivo</label>
+                <?= render_select($conn, 'id_ricovero',
+                    "SELECT R.IDRicovero, A.Nome, R.IDBox FROM Ricovero R JOIN CartellaClinica C ON R.IDCartella = C.IDCartella JOIN Animale A ON C.IDAnimale = A.IDAnimale WHERE R.DataUscita IS NULL ORDER BY R.IDRicovero",
+                    'IDRicovero', fn($r) => "Ricovero #{$r['IDRicovero']} — {$r['Nome']} (Box {$r['IDBox']})") ?>
             </div>
             <div class="field">
                 <label for="data_uscita">Data uscita</label>

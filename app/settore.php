@@ -9,7 +9,7 @@ if (isset($_POST['submit'])) {
 
 $page_title    = "Nuovo settore";
 $page_heading  = "Aggiungi nuovo settore";
-$page_subtitle = "Crea un nuovo reparto clinico con la relativa specializzazione medica.";
+$page_subtitle = "Aggiungi un settore clinico.";
 $show_back = true;
 include "partials/header.php";
 ?>

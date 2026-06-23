@@ -9,7 +9,7 @@ if (isset($_POST['submit'])) {
 
 $page_title    = "Registra visita";
 $page_heading  = "Registrazione visita";
-$page_subtitle = "Registra una visita collegandola alla cartella clinica, al veterinario e al settore.";
+$page_subtitle = "Registra una nuova visita.";
 $show_back = true;
 include "partials/header.php";
 ?>
@@ -27,17 +27,23 @@ include "partials/header.php";
         </div>
         <div class="form-row">
             <div class="field">
-                <label for="id_persona">ID Persona</label>
-                <input id="id_persona" type="number" name="id_persona" required>
+                <label for="id_persona">Veterinario</label>
+                <?= render_select($conn, 'id_persona',
+                    "SELECT IDPersona, Nome, Cognome, Specializzazione FROM Personale ORDER BY Cognome",
+                    'IDPersona', fn($r) => "{$r['Nome']} {$r['Cognome']} ({$r['Specializzazione']})") ?>
             </div>
             <div class="field">
-                <label for="id_settore">ID Settore</label>
-                <input id="id_settore" type="number" name="id_settore" required>
+                <label for="id_settore">Settore</label>
+                <?= render_select($conn, 'id_settore',
+                    "SELECT IDSettore, Nome, TipoSpecializzazione FROM Settore ORDER BY Nome",
+                    'IDSettore', fn($r) => "{$r['Nome']} ({$r['TipoSpecializzazione']})") ?>
             </div>
         </div>
         <div class="field">
-            <label for="id_cartella">ID Cartella</label>
-            <input id="id_cartella" type="number" name="id_cartella" required>
+            <label for="id_cartella">Cartella clinica</label>
+            <?= render_select($conn, 'id_cartella',
+                "SELECT C.IDCartella, A.Nome, A.Specie FROM CartellaClinica C JOIN Animale A ON C.IDAnimale = A.IDAnimale ORDER BY C.IDCartella",
+                'IDCartella', fn($r) => "Cartella #{$r['IDCartella']} — {$r['Nome']} ({$r['Specie']})") ?>
         </div>
         <div class="form-actions">
             <button class="btn" type="submit" name="submit">Registra visita</button>
